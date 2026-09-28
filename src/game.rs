@@ -11,7 +11,7 @@ unsafe extern "C" {
         vertices_len: u32,
         indices_ptr: u32,
         indices_len: u32,
-    ) -> usize;
+    ) -> u32;
 }
 
 pub fn log(message: &str) {
@@ -28,6 +28,6 @@ pub fn create_mesh_object(vertices: &[f32], indices: &[u32]) -> Object {
             indices.as_ptr() as u32,
             indices.len() as u32,
         );
-        Object::new(object_id)
+        Object::new(object_id as usize)
     }
 }
