@@ -5,6 +5,9 @@ unsafe extern "C" {
     #[link_name = "log"]
     fn game_log(ptr: u32, len: u32);
 
+    #[link_name = "get_time"]
+    fn game_get_time() -> u32;
+
     #[link_name = "create_mesh"]
     fn game_create_mesh(
         vertices_ptr: u32,
@@ -14,6 +17,12 @@ unsafe extern "C" {
         indices_ptr: u32,
         indices_len: u32,
     ) -> u32;
+}
+
+pub fn get_time() -> u32 {
+    unsafe {
+        game_get_time()
+    }
 }
 
 pub fn log(message: &str) {
