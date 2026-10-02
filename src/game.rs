@@ -9,6 +9,8 @@ unsafe extern "C" {
     fn game_create_mesh(
         vertices_ptr: u32,
         vertices_len: u32,
+        uvs_ptr: u32,
+        uvs_len: u32,
         indices_ptr: u32,
         indices_len: u32,
     ) -> u32;
@@ -20,11 +22,13 @@ pub fn log(message: &str) {
     }
 }
 
-pub fn create_mesh_object(vertices: &[f32], indices: &[u32]) -> Object {
+pub fn create_mesh_object(vertices: &[f32], uvs: &[f32], indices: &[u32]) -> Object {
     unsafe {
         let object_id = game_create_mesh(
             vertices.as_ptr() as u32,
             vertices.len() as u32,
+            uvs.as_ptr() as u32,
+            uvs.len() as u32,
             indices.as_ptr() as u32,
             indices.len() as u32,
         );
