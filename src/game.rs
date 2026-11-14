@@ -1,4 +1,4 @@
-use crate::objects::object::Object;
+use crate::objects::{object::Object, texture::Texture};
 
 #[link(wasm_import_module = "env")]
 unsafe extern "C" {
@@ -25,6 +25,17 @@ unsafe extern "C" {
         uvs_ptr: u32,
         uvs_len: u32,
     ) -> u32;
+
+    #[link_name = "create_texture_rgba8"]
+    fn game_create_texture_rgba8(
+        pixels_ptr: u32,
+        pixels_len: u32,
+        width: u32,
+        height: u32,
+    ) -> u32;
+
+    #[link_name = "set_texture"]
+    fn game_set_texture(object_id: u32, texture_id: u32);
 }
 
 pub fn get_time() -> u32 {
@@ -62,5 +73,36 @@ pub fn create_mesh_object(vertices: &Vec<f32>, uvs: &Vec<f32>) -> Object {
             uvs.len() as u32,
         );
         Object::new(object_id as usize)
+    }
+}
+
+pub fn create_texture_rgba8(
+    pixels: &[u8],
+    width: u32,
+    height: u32,
+) -> Texture {
+    assert!(
+        (width as usize)
+            .checked_mul(height as usize)
+            .and_then(|n| n.checked_mul(4))
+            == Some(pixels.len()),
+        "Expected width * height * 4 RGBA bytes"
+    );
+
+    let texture_id = unsafe {
+        game_create_texture_rgba8(
+            pixels.as_ptr() as u32,
+            pixels.len() as u32,
+            width,
+            height,
+        )
+    };
+
+    Texture::new(texture_id as usize)
+}
+
+pub fn set_texture(object_id: usize, texture_id: usize) {
+    unsafe {
+        game_set_texture(object_id as u32, texture_id as u32);
     }
 }
