@@ -27,6 +27,9 @@ unsafe extern "C" {
     #[link_name = "set_texture"]
     fn game_set_texture(object_id: u32, texture_id: u32);
 
+    #[link_name = "set_position"]
+    fn game_set_position(object_id: u32, x: f32, y: f32, z: f32);
+
     #[link_name = "get_element_by_name"]
     fn game_get_element_by_name(name_ptr: u32, name_len: u32) -> u32;
 }
@@ -101,5 +104,11 @@ pub fn get_element_by_name(name: &str) -> Option<Object> {
         } else {
             Some(Object::new(object_id as usize))
         }
+    }
+}
+
+pub fn set_position(object_id: usize, x: f32, y: f32, z: f32) {
+    unsafe {
+        game_set_position(object_id as u32, x, y, z);
     }
 }
