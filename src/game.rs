@@ -27,6 +27,9 @@ unsafe extern "C" {
     #[link_name = "set_texture"]
     fn game_set_texture(object_id: u32, texture_id: u32);
 
+    #[link_name = "get_position"]
+    fn game_get_position(object_id: u32, out_position: *mut f32);
+
     #[link_name = "set_position"]
     fn game_set_position(object_id: u32, x: f32, y: f32, z: f32);
 
@@ -105,6 +108,16 @@ pub fn get_element_by_name(name: &str) -> Option<Object> {
             Some(Object::new(object_id as usize))
         }
     }
+}
+
+pub fn get_position(object_id: usize) -> (f32, f32, f32) {
+    let mut position = [0.0_f32; 3];
+
+    unsafe {
+        game_get_position(object_id as u32, position.as_mut_ptr());
+    }
+
+    (position[0], position[1], position[2])
 }
 
 pub fn set_position(object_id: usize, x: f32, y: f32, z: f32) {

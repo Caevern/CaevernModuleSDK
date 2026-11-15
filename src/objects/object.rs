@@ -1,4 +1,7 @@
-use crate::{game::set_position, objects::texture::Texture};
+use crate::{
+    game::{get_position, set_position},
+    objects::texture::Texture,
+};
 
 pub struct Object {
     object_id: usize,
@@ -15,6 +18,9 @@ impl Object {
 
     pub fn get_id(&self) -> usize {
         self.object_id
+    }
+    pub fn get_position(&self) -> (f32, f32, f32) {
+        get_position(self.object_id)
     }
 
     pub fn set_texture(&mut self, texture: Texture) {
